@@ -1,0 +1,148 @@
+collections {
+   group {
+      name: "elm/genlist/item/default/default";
+      alias:"elm/genlist/item_odd/default/default";
+      data.item: "stacking" "below";
+      data.item: "selectraise" "on";
+      data.item: "labels" "elm.text";
+      data.item: "icons" "elm.swallow.icon elm.swallow.end";
+      data.item: "treesize" "20";
+      //      data.item: "states" "";
+
+      parts {
+         part { name: "event";
+            type: RECT;
+            repeat_events: 1;
+            description {
+               state: "default" 0.0;
+               color: 0 0 0 0;
+            }
+         }
+         part { name: "elm.swallow.icon";
+            type: SWALLOW;
+
+            description { state: "default" 0.0;
+               min: 0 200;
+            }
+         }
+      }
+      
+   }
+
+   group { name: "elm/gengrid/item/default/default";
+      data.item: "labels" "elm.text";
+      data.item: "icons" "elm.swallow.icon";
+       styles
+       {
+           style { name: "gengrid_style";
+               base: "font=Sans font_size=10 align=left valign=0.5 color=#AAA text_class=grid_item wrap=word";
+               tag:  "br" "\n";
+               tag:  "ps" "ps";
+               tag:  "hilight" "+ font=Sans:style=Bold";
+               tag:  "b" "+ font=Sans:style=Bold";
+               tag:  "tab" "\t";
+           }
+           style { name: "gengrid_selected_style";
+               base: "font=Sans font_size=10 align=left valign=0.5 color=#000 text_class=grid_item wrap=word";
+               tag:  "br" "\n";
+               tag:  "ps" "ps";
+               tag:  "hilight" "+ font=Sans:style=Bold";
+               tag:  "b" "+ font=Sans:style=Bold";
+               tag:  "tab" "\t";
+           }
+       }
+      parts {
+         part { name: "event";
+            type: RECT;
+            repeat_events: 1;
+            description {
+               state: "default" 0.0;
+               color: 0 0 0 0;
+            }
+         }
+
+         part { name: "elm.swallow.icon";
+            clip_to: "disclip";
+            type: SWALLOW;
+            description { state: "default" 0.0;
+            }
+         }
+
+         part {
+            type: RECT;
+            mouse_events: 0;
+            description {
+               color: 0 0 0 200;
+               rel1.relative: 0.0 0.4;
+               rel2.relative: 1.0 1.0;
+            }
+         }
+
+         part { name: "elm.text";
+            clip_to: "disclip";
+            type: TEXTBLOCK;
+            mouse_events: 0;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1 {
+                  relative: 0.0  0.4;
+               }
+               rel2 {
+                  relative: 1.0  1.0;
+               }
+               text.style: "gengrid_style";
+               text.min: 0 0;
+
+            }
+            description { state: "selected" 0.0;
+               inherit: "default" 0.0;
+               text.style: "gengrid_selected_style";
+               text.min: 0 0;
+            }
+         }
+         part { name: "disclip";
+            type: RECT;
+            description { state: "default" 0.0;
+            }
+            description { state: "disabled" 0.0;
+               inherit: "default" 0.0;
+               color: 255 255 255 64;
+            }
+         }
+      }
+      programs {
+         // signal: elm,state,%s,active
+         //   a "check" item named %s went active
+         // signal: elm,state,%s,passive
+         //   a "check" item named %s went passive
+         // default is passive
+         program { name:    "go_active";
+            signal:  "elm,state,selected";
+            source:  "elm";
+            action:  STATE_SET "selected" 0.0;
+            target:  "elm.text";
+         }
+         program { name:    "go_passive";
+            signal:  "elm,state,unselected";
+            source:  "elm";
+            action:  STATE_SET "default" 0.0;
+            target:  "elm.text";
+            transition: LINEAR 0.1;
+         }
+         program { name:    "go_disabled";
+            signal:  "elm,state,disabled";
+            source:  "elm";
+            action:  STATE_SET "disabled" 0.0;
+            target:  "disclip";
+         }
+         program { name:    "go_enabled";
+            signal:  "elm,state,enabled";
+            source:  "elm";
+            action:  STATE_SET "default" 0.0;
+            target:  "disclip";
+         }
+      }
+   }
+   
+}
+
